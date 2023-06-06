@@ -71,6 +71,7 @@ $ npm run test:cov
     }
   }
 
+  // PAYLOAD TO CREATE NEW CREDENTIAL
   {
     "credentialData": {
       "email": "demo2@test.com",
@@ -78,7 +79,7 @@ $ npm run test:cov
     }
   }
 
-  // response
+  // RESPONSE
   {
     "data": {
       "create": {
@@ -129,7 +130,7 @@ $ npm run test:cov
     }
   }
 
-  // EXCEPTION RESPONSE
+  // RESPONSE FROM EXCEPTION
   {
     "errors": [
       {
