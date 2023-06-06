@@ -13,13 +13,13 @@ export class CredentialResolver {
   }
 
   @Query(() => CredentialModel)
-  async findByOneEmail(@Args('email') email: string): Promise<CredentialModel> {
-    const credential = await this.credentialService.findOneByEmail(email);
+  async signin(@Args('credentialData') credentialData: CredentialModelInput) {
+    const credential = await this.credentialService.signin(credentialData);
     return credential;
   }
 
   @Mutation(() => CredentialModel)
-  async create(@Args('credentialData') credentialData: CredentialModelInput) {
-    return this.credentialService.create(credentialData);
+  async signup(@Args('credentialData') credentialData: CredentialModelInput) {
+    return this.credentialService.signup(credentialData);
   }
 }

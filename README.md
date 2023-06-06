@@ -64,7 +64,7 @@ $ npm run test:cov
 
 ```bash
   mutation CreateCredential($credentialData: CredentialModelInput!) {
-    create(credentialData: $credentialData) {
+    signup(credentialData: $credentialData) {
       uuid
       email
       password
@@ -90,22 +90,50 @@ $ npm run test:cov
   }
 
   // Query
-  query FindUserByEmail($email: String!) {
-    findByOneEmail(email: $email) {
+  query Signin($credentialData: CredentialModelInput!) {
+    signin(credentialData: $credentialData) {
+      uuid
       email
     }
   }
 
+  // WRONG PASSWORD
   {
-    "email": "demo2@test.com"
+    "credentialData": {
+      "email": "demo2@test.com",
+      "password": "1234562"
+    }
   }
 
+  // CORRECT PASSWORD
+  {
+    "credentialData": {
+      "email": "demo2@test.com",
+      "password": "123456"
+    }
+  }
+
+  // SUCCESS RESPONSE
   {
     "data": {
-      "findByOneEmail": {
+      "signin": {
+        "uuid": "d96c4197-da93-485b-9f1f-8ea971334764",
         "email": "demo2@test.com"
       }
     }
+  }
+
+  // EXCEPTION RESPONSE
+  {
+    "errors": [
+      {
+        "message": "Forbidden Access",
+        "locations": []
+      },
+    ],
+    path: ["signin"],
+    extensions: {},
+    data: null
   }
 ```
 

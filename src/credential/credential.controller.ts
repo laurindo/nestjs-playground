@@ -7,9 +7,12 @@ export class CredentialController {
 
   // Browser request: http://localhost:3000/credential/something?email=demo@test.com
   @Get('something')
-  async findByEmail(@Query('email') email: string): Promise<any> {
+  async findByEmail(
+    @Query('email') email: string,
+    @Query('password') password: string, // this is just a test
+  ): Promise<any> {
     console.log('email', email);
-    const result = await this.credentialService.findOneByEmail(email);
+    const result = await this.credentialService.signin({ email, password });
     console.log(result);
     return result ? result : { error: 'user not found' };
   }

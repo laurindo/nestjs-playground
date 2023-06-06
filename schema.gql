@@ -11,14 +11,14 @@ type CredentialModel {
 
 type Query {
   findOneById(uuid: String!): CredentialModel!
-  findByOneEmail(email: String!): CredentialModel!
-}
-
-type Mutation {
-  create(credentialData: CredentialModelInput!): CredentialModel!
+  signin(credentialData: CredentialModelInput!): CredentialModel!
 }
 
 input CredentialModelInput {
   email: String!
   password: String!
+}
+
+type Mutation {
+  signup(credentialData: CredentialModelInput!): CredentialModel!
 }

@@ -1,12 +1,13 @@
 import { uuid } from 'uuidv4';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { CredentialModel } from './credential.model';
 import { Credential } from './credential.schema';
 import { CredentialCreateDTO } from './credential.create.dto';
-import { encrypt } from 'src/utils/hashing';
+import { compare, encrypt } from 'src/utils/hashing';
+import { ERROR_MSGS } from 'src/constants/errors';
 
 @Injectable()
 export class CredentialService {
@@ -14,16 +15,39 @@ export class CredentialService {
     @InjectModel(Credential.name) private credentialModel: Model<Credential>,
   ) {}
 
-  async findOneById(uuid: string): Promise<CredentialModel> {
-    return await this.credentialModel.findOne({ uuid });
-  }
+  private readonly logger = new Logger(CredentialService.name);
 
-  async findOneByEmail(email: string): Promise<CredentialModel> {
+  private async findOneByEmail(email: string): Promise<CredentialModel> {
     const result = await this.credentialModel.findOne({ email });
     return result;
   }
 
-  async create(
+  async findOneById(uuid: string): Promise<CredentialModel> {
+    return await this.credentialModel.findOne({ uuid });
+  }
+
+  async signin(
+    createCredentialDto: CredentialCreateDTO,
+  ): Promise<CredentialModel | { error: true; message: string }> {
+    const result = await this.credentialModel.findOne({
+      email: createCredentialDto.email,
+    });
+
+    const isPasswordOk = await compare(
+      createCredentialDto.password,
+      result.password,
+    );
+
+    if (result && isPasswordOk) {
+      return { uuid: result.uuid, email: result.email };
+    }
+
+    this.logger.warn(`isPasswordOk: ${isPasswordOk}`);
+    this.logger.warn(`isUserExists: ${!!result}`);
+    throw new HttpException(ERROR_MSGS.FORBIDDEN, HttpStatus.FORBIDDEN);
+  }
+
+  async signup(
     createCredentialDto: CredentialCreateDTO,
   ): Promise<CredentialModel> {
     const hasCredential = await this.findOneByEmail(createCredentialDto.email);
@@ -37,6 +61,7 @@ export class CredentialService {
       password: await encrypt(createCredentialDto.password),
       uuid: uuid(),
     });
+
     return credential.save();
   }
 }
