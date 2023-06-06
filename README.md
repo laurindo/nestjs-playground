@@ -88,7 +88,9 @@ $ npm run test:cov
       }
     }
   }
+```
 
+```bash
   // Query
   query Signin($credentialData: CredentialModelInput!) {
     signin(credentialData: $credentialData) {
@@ -96,7 +98,9 @@ $ npm run test:cov
       email
     }
   }
+```
 
+```bash
   // WRONG PASSWORD
   {
     "credentialData": {
@@ -112,7 +116,9 @@ $ npm run test:cov
       "password": "123456"
     }
   }
+```
 
+```bash
   // SUCCESS RESPONSE
   {
     "data": {
