@@ -62,7 +62,6 @@ $ npm run test:cov
 
 ![image](https://github.com/laurindo/nestjs-playground/assets/2501144/1cd7ed97-5579-48df-8ec8-b6f77b5acf8f)
 
-
 ```bash
   mutation CreateCredential($credentialData: CredentialModelInput!) {
     create(credentialData: $credentialData) {
@@ -86,6 +85,25 @@ $ npm run test:cov
         "uuid": "d96c4197-da93-485b-9f1f-8ea971334764",
         "email": "demo2@test.com",
         "password": "$2b$10$H0MQp/qanN8FmnPnDikXnOYjNUnlddAlxIexvofAhpVHri8qv6r62"
+      }
+    }
+  }
+
+  // Query
+  query FindUserByEmail($email: String!) {
+    findByOneEmail(email: $email) {
+      email
+    }
+  }
+
+  {
+    "email": "demo2@test.com"
+  }
+
+  {
+    "data": {
+      "findByOneEmail": {
+        "email": "demo2@test.com"
       }
     }
   }

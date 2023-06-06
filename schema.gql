@@ -11,6 +11,7 @@ type CredentialModel {
 
 type Query {
   findOneById(uuid: String!): CredentialModel!
+  findByOneEmail(email: String!): CredentialModel!
 }
 
 type Mutation {
