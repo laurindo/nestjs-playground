@@ -58,7 +58,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## GraphQL Exampes
+## GraphQL Examples
+
+![image](https://github.com/laurindo/nestjs-playground/assets/2501144/1cd7ed97-5579-48df-8ec8-b6f77b5acf8f)
+
 
 ```bash
   mutation CreateCredential($credentialData: CredentialModelInput!) {
