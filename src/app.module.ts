@@ -9,9 +9,7 @@ import { CredentialModule } from './credential/credential.module';
 @Module({
   imports: [
     CredentialModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://nestuserexample:kc4iqltV2GG4L9Pu@nestexample.ivpc7xx.mongodb.net',
-    ),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
