@@ -60,7 +60,7 @@ $ npm run test:cov
 
 ## GraphQL Examples
 
-![image](https://github.com/laurindo/nestjs-playground/assets/2501144/1cd7ed97-5579-48df-8ec8-b6f77b5acf8f)
+URL: `http://localhost:3000/graphql`
 
 ```bash
   mutation CreateCredential($credentialData: CredentialModelInput!) {
