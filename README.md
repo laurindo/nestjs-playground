@@ -58,6 +58,36 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## GraphQL Exampes
+
+```bash
+  mutation CreateCredential($credentialData: CredentialModelInput!) {
+    create(credentialData: $credentialData) {
+      uuid
+      email
+      password
+    }
+  }
+
+  {
+    "credentialData": {
+      "email": "demo2@test.com",
+      "password": "123456"
+    }
+  }
+
+  // response
+  {
+    "data": {
+      "create": {
+        "uuid": "d96c4197-da93-485b-9f1f-8ea971334764",
+        "email": "demo2@test.com",
+        "password": "$2b$10$H0MQp/qanN8FmnPnDikXnOYjNUnlddAlxIexvofAhpVHri8qv6r62"
+      }
+    }
+  }
+```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
