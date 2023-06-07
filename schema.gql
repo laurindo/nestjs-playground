@@ -7,10 +7,11 @@ type CredentialModel {
   uuid: String
   email: String
   password: String
+  accessToken: String
 }
 
 type Query {
-  findOneById(uuid: String!): CredentialModel!
+  findLoggedUser: CredentialModel!
   signin(credentialData: CredentialModelInput!): CredentialModel!
 }
 

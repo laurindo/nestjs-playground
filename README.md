@@ -64,13 +64,12 @@ URL: `http://localhost:3000/graphql`
 
 ![image](https://github.com/laurindo/nestjs-playground/assets/2501144/8d3a563f-93df-48fb-a8e6-d136fde6f466)
 
-
 ```bash
   mutation CreateCredential($credentialData: CredentialModelInput!) {
     signup(credentialData: $credentialData) {
       uuid
       email
-      password
+    	accessToken
     }
   }
 
@@ -85,10 +84,10 @@ URL: `http://localhost:3000/graphql`
   // RESPONSE
   {
     "data": {
-      "create": {
-        "uuid": "d96c4197-da93-485b-9f1f-8ea971334764",
-        "email": "demo2@test.com",
-        "password": "$2b$10$H0MQp/qanN8FmnPnDikXnOYjNUnlddAlxIexvofAhpVHri8qv6r62"
+      "signup": {
+        "uuid": "99d0f196-d312-4a27-bae1-e02c3d942ba9",
+        "email": "demo4@test.com",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OWQwZjE5Ni1kMzEyLTRhMjctYmFlMS1lMDJjM2Q5NDJiYTkiLCJlbWFpbCI6ImRlbW80QHRlc3QuY29tIiwiaWF0IjoxNjg2MTQ2NjAyfQ.eP0jT-SJRRDh83Ipzfw3bYUqI-IvP8Wh5nu6t1Gw0lI"
       }
     }
   }
@@ -145,6 +144,29 @@ URL: `http://localhost:3000/graphql`
     extensions: {},
     data: null
   }
+```
+
+```bash
+query FindLoggedUser {
+  findLoggedUser {
+    email
+  }
+}
+
+// Go to HTTP HEADERS
+{
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OWQwZjE5Ni1kMzEyLTRhMjctYmFlMS1lMDJjM2Q5NDJiYTkiLCJlbWFpbCI6ImRlbW80QHRlc3QuY29tIiwiaWF0IjoxNjg2MTU3MTE1fQ.oM_fXDwg55jrFTlO4sW6mY0KbkdV3If87jsa68oLSVc"
+}
+
+// RESPONSE
+{
+  "data": {
+    "findUser": {
+      "email": "demo4@test.com"
+    }
+  }
+}
+
 ```
 
 ## Support

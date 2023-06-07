@@ -1,5 +1,5 @@
-import { uuid } from 'uuidv4';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { uuid as uuidv4 } from 'uuidv4';
+import { UnauthorizedException, Injectable, Logger } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -7,7 +7,7 @@ import { CredentialModel } from './credential.model';
 import { Credential } from './credential.schema';
 import { CredentialCreateDTO } from './credential.create.dto';
 import { compare, encrypt } from 'src/utils/hashing';
-import { ERROR_MSGS } from 'src/constants/errors';
+import { JwtServiceUtil } from 'src/utils/jwt';
 
 @Injectable()
 export class CredentialService {
@@ -16,19 +16,20 @@ export class CredentialService {
   ) {}
 
   private readonly logger = new Logger(CredentialService.name);
+  private jwtServiceUtil = new JwtServiceUtil();
 
   private async findOneByEmail(email: string): Promise<CredentialModel> {
     const result = await this.credentialModel.findOne({ email });
     return result;
   }
 
-  async findOneById(uuid: string): Promise<CredentialModel> {
-    return await this.credentialModel.findOne({ uuid });
+  async findByEmail(email: string): Promise<CredentialModel> {
+    return await this.credentialModel.findOne({ email });
   }
 
   async signin(
     createCredentialDto: CredentialCreateDTO,
-  ): Promise<CredentialModel | { error: true; message: string }> {
+  ): Promise<CredentialModel> {
     const result = await this.credentialModel.findOne({
       email: createCredentialDto.email,
     });
@@ -39,12 +40,16 @@ export class CredentialService {
     );
 
     if (result && isPasswordOk) {
-      return { uuid: result.uuid, email: result.email };
+      const accessToken = await this.jwtServiceUtil.getAccessToken(
+        result.uuid,
+        result.email,
+      );
+      return { uuid: result.uuid, email: result.email, accessToken };
     }
 
     this.logger.warn(`isPasswordOk: ${isPasswordOk}`);
     this.logger.warn(`isUserExists: ${!!result}`);
-    throw new HttpException(ERROR_MSGS.FORBIDDEN, HttpStatus.FORBIDDEN);
+    throw new UnauthorizedException();
   }
 
   async signup(
@@ -53,13 +58,24 @@ export class CredentialService {
     const hasCredential = await this.findOneByEmail(createCredentialDto.email);
 
     if (hasCredential) {
-      return Promise.resolve({ email: createCredentialDto.email });
+      const accessToken = await this.jwtServiceUtil.getAccessToken(
+        hasCredential.uuid,
+        createCredentialDto.email,
+      );
+      return Promise.resolve({ email: createCredentialDto.email, accessToken });
     }
+
+    const uuid = uuidv4();
+    const accessToken = await this.jwtServiceUtil.getAccessToken(
+      uuid,
+      createCredentialDto.email,
+    );
 
     const credential = new this.credentialModel({
       ...createCredentialDto,
       password: await encrypt(createCredentialDto.password),
-      uuid: uuid(),
+      accessToken,
+      uuid,
     });
 
     return credential.save();

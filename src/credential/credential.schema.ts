@@ -13,6 +13,9 @@ export class Credential {
 
   @Prop({ required: true })
   password: string;
+
+  @Prop({ required: true })
+  accessToken: string;
 }
 
 export const CredentialSchema = SchemaFactory.createForClass(Credential);

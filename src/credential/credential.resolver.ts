@@ -1,14 +1,19 @@
-import { Resolver, Args, Query, Mutation } from '@nestjs/graphql';
+import { Resolver, Args, Query, Mutation, Context } from '@nestjs/graphql';
 import { CredentialService } from './credential.service';
 import { CredentialModel, CredentialModelInput } from './credential.model';
-
+import { AuthGuard } from 'src/utils/auth/auth.guard';
+import { UseGuards } from '@nestjs/common';
 @Resolver(() => CredentialModel)
 export class CredentialResolver {
   constructor(private credentialService: CredentialService) {}
 
+  @UseGuards(AuthGuard)
   @Query(() => CredentialModel)
-  async findOneById(@Args('uuid') uuid: string): Promise<CredentialModel> {
-    const credential = await this.credentialService.findOneById(uuid);
+  async findLoggedUser(@Context() context: any): Promise<CredentialModel> {
+    const { req } = context;
+    const credential = await this.credentialService.findByEmail(
+      req?.user?.email,
+    );
     return credential;
   }
 

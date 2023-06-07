@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, InputType } from '@nestjs/graphql';
+import { Field, ObjectType, InputType } from '@nestjs/graphql';
 
 @ObjectType({ description: 'CredentialModel' })
 export class CredentialModel {
@@ -10,6 +10,9 @@ export class CredentialModel {
 
   @Field({ nullable: true })
   password?: string;
+
+  @Field({ nullable: true })
+  accessToken: string;
 }
 
 @InputType()
