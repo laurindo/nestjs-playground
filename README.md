@@ -65,19 +65,23 @@ URL: `http://localhost:3000/graphql`
 ![image](https://github.com/laurindo/nestjs-playground/assets/2501144/8d3a563f-93df-48fb-a8e6-d136fde6f466)
 
 ```bash
-  mutation CreateCredential($credentialData: CredentialModelInput!) {
+  mutation Signup($credentialData: CredentialModelInput!) {
     signup(credentialData: $credentialData) {
       uuid
       email
-    	accessToken
+      accessToken
+      isAdmin
+      roles
     }
   }
 
   // PAYLOAD TO CREATE NEW CREDENTIAL
   {
     "credentialData": {
-      "email": "demo2@test.com",
-      "password": "123456"
+      "email": "email@domain.com",
+      "password": "123456",
+      "isAdmin": true,
+      "roles": ["Admin"]
     }
   }
 
@@ -86,8 +90,10 @@ URL: `http://localhost:3000/graphql`
     "data": {
       "signup": {
         "uuid": "99d0f196-d312-4a27-bae1-e02c3d942ba9",
-        "email": "demo4@test.com",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OWQwZjE5Ni1kMzEyLTRhMjctYmFlMS1lMDJjM2Q5NDJiYTkiLCJlbWFpbCI6ImRlbW80QHRlc3QuY29tIiwiaWF0IjoxNjg2MTQ2NjAyfQ.eP0jT-SJRRDh83Ipzfw3bYUqI-IvP8Wh5nu6t1Gw0lI"
+        "email": "email@domain.com",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MDVhNjZhMi1iNzJmLTQ2MTQtYmNlOS04NDlkN2ZmN2VjNmUiLCJlbWFpbCI6ImRzbGF1cmluZG9AZ21haWwuY29tIiwicm9sZXMiOlsiYWRtaW4iXSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjg2MzQyMjE5fQ.Bebdu6EbrtXrNGPeb_P3F6JatUioIWirin3qJYZbVCs",
+        "isAdmin": true,
+        "roles": ["admin"]
       }
     }
   }
