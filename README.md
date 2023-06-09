@@ -91,7 +91,7 @@ URL: `http://localhost:3000/graphql`
       "signup": {
         "uuid": "99d0f196-d312-4a27-bae1-e02c3d942ba9",
         "email": "email@domain.com",
-        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MDVhNjZhMi1iNzJmLTQ2MTQtYmNlOS04NDlkN2ZmN2VjNmUiLCJlbWFpbCI6ImRzbGF1cmluZG9AZ21haWwuY29tIiwicm9sZXMiOlsiYWRtaW4iXSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjg2MzQyMjE5fQ.Bebdu6EbrtXrNGPeb_P3F6JatUioIWirin3qJYZbVCs",
+        "accessToken": "<jwt token generated>",
         "isAdmin": true,
         "roles": ["admin"]
       }
@@ -161,7 +161,7 @@ query FindLoggedUser {
 
 // Go to HTTP HEADERS
 {
-  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OWQwZjE5Ni1kMzEyLTRhMjctYmFlMS1lMDJjM2Q5NDJiYTkiLCJlbWFpbCI6ImRlbW80QHRlc3QuY29tIiwiaWF0IjoxNjg2MTU3MTE1fQ.oM_fXDwg55jrFTlO4sW6mY0KbkdV3If87jsa68oLSVc"
+  "Authorization": "Bearer <jwt token>"
 }
 
 // RESPONSE
