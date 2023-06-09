@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CredentialModule } from './credential/credential.module';
 
 @Module({
+  providers: [],
   imports: [
     CredentialModule,
     JwtModule.register({

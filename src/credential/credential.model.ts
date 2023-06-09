@@ -1,18 +1,25 @@
 import { Field, ObjectType, InputType } from '@nestjs/graphql';
+import { Role } from 'src/utils/auth/role.enum';
 
 @ObjectType({ description: 'CredentialModel' })
 export class CredentialModel {
-  @Field({ nullable: true })
+  @Field()
   uuid?: string;
 
-  @Field({ nullable: true })
+  @Field()
   email: string;
 
   @Field({ nullable: true })
   password?: string;
 
-  @Field({ nullable: true })
+  @Field()
   accessToken: string;
+
+  @Field()
+  isAdmin: boolean;
+
+  @Field((type) => [Role])
+  roles: Role[];
 }
 
 @InputType()
@@ -22,4 +29,10 @@ export class CredentialModelInput {
 
   @Field()
   password: string;
+
+  @Field()
+  isAdmin: boolean;
+
+  @Field((type) => [Role])
+  roles: Role[];
 }

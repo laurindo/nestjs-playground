@@ -31,6 +31,8 @@ lerna-debug.log*
 .env.local
 .env.production
 
+info.txt
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

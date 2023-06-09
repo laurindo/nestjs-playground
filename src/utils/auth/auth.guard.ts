@@ -5,19 +5,36 @@ import {
   UnauthorizedException,
   Logger,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { Role } from './role.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private reflector: Reflector) {}
 
   private readonly logger = new Logger(AuthGuard.name);
 
+  private matchRoles(roles: Role[], userRolesFromSession: string[]): boolean {
+    this.logger.log(`validating roles inside matchRoles(roles): ${roles}`);
+    this.logger.log(
+      `validating roles inside matchRoles(user roles): ${userRolesFromSession}`,
+    );
+
+    const hasRoles = roles?.filter((role) => {
+      return userRolesFromSession?.includes(role);
+    });
+
+    return !!hasRoles.length;
+  }
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     this.logger.log('Starting process to extract and validate token');
-    // const request = context.switchToHttp().getRequest();
+
+    const roles = this.reflector.get<Role[]>('roles', context.getHandler());
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
     const token = this.extractTokenFromHeader(req);
@@ -35,8 +52,15 @@ export class AuthGuard implements CanActivate {
       });
 
       this.logger.log('Payload verified from JWT Service', payload);
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
+
+      const userIsAllowed = this.matchRoles(roles, payload.roles);
+
+      if (!userIsAllowed) {
+        throw new UnauthorizedException();
+      }
+
+      this.logger.log('User is allowed: ', userIsAllowed);
+
       req['user'] = payload;
       this.logger.log("Payload assigned to req['user']");
     } catch (error) {
